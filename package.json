@@ -1,0 +1,19 @@
+{
+  "name": "tp-20151c-matematica-superior",
+  "version": "1.0.0",
+  "description": "Trabajo practico matematica superior",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nicolasazrak/tp-20151c-matematica-superior.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nicolasazrak/tp-20151c-matematica-superior/issues"
+  },
+  "homepage": "https://github.com/nicolasazrak/tp-20151c-matematica-superior#readme"
+}
