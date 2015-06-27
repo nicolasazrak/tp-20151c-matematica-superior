@@ -46,7 +46,6 @@ if (![].includes) {
     }
 
 Array.prototype.opuesto = function(otroArray){
-
     var opuestos = [];
     this.forEach(function(elem){
         if(!otroArray.includes(elem)){
@@ -58,47 +57,57 @@ Array.prototype.opuesto = function(otroArray){
 
 
 function k1(muestras){
-    return muestras.reduct(function(valorAnterior, muestraActual){
-        return valorAnterior + Math.sqrt(muestraActual.x);
+    return muestras.reduce(function(valorAnterior, muestraActual){
+        return valorAnterior + Math.pow(muestraActual.x, 2);
     }, 0);
 }
 
 function k2(muestras){
-    return muestras.reduct(function(valorAnterior, muestraActual){
-        return valorAnterior + Math.sqrt(muestraActual.y);
+    return muestras.reduce(function(valorAnterior, muestraActual){
+        //return valorAnterior + Math.pow(muestraActual.y, 2);
+        return valorAnterior + muestraActual.x;
     }, 0);
 }
 
 function k3(muestras){
-    return muestras.reduct(function(valorAnterior, muestraActual){
+    return muestras.reduce(function(valorAnterior, muestraActual){
         return valorAnterior + muestraActual.x * muestraActual.y;
     }, 0);
 }
 
 function k4(muestras){
-    return muestras.length;
+    return muestras.reduce(function(valorAnterior, muestraActual){
+        return valorAnterior + muestraActual.y;
+    }, 0);
 }
 
 
 /**
 * Obtiene el coeficiente lineal para la estimacion dados los parametros k1, k2, k3, k4
 */
-function a(k1, k2, k3, k4){
-
+function a(b, k1, k2, k3, k4){
+    return (k3-b*k2)/k1;
 }
 
 /**
 * Obtiene el coeficiente independiente para la estimacion dados los parametros k1, k2, k3, k4
 */
 function b(k1, k2, k3, k4){
-
+    return (k4*k1-k3*k2)/(5*k1-k2*k2);
 }
 
 /**
 * Dados un grupo de valores devuelve una estimacion
 */
 function estimar(valores, a, b){
-
+    var estimados = [];
+    valores.forEach(function(muestra){
+        estimados.push({
+            x: muestra.x,
+            y: muestra.x * a + b
+        });
+    });
+    return estimados;
 }
 
 
@@ -110,7 +119,7 @@ function estimar(valores, a, b){
 */
 function erroresCuadrados(estimado, real){
     return estimado.reduce(function(acumulador, muestraEstimada, index){
-        return acumulador + Math.sqrt(muestraEstimada.y - real[index].y);
+        return acumulador + Math.pow(muestraEstimada.y - real[index].y, 2);
     }, 0);
 }
 
@@ -128,19 +137,19 @@ function obtenerCombionacionCorrecta(){
                     posibleGrupo2.push(muestra2);
 
                     /* Genera la formula que estima los valores con los k1, k2, k3, k4 */
-                    var aGrupo1 = a(k1(posibleGrupo1), k2(posibleGrupo1), k3(posibleGrupo1), k4(posibleGrupo1));
                     var bGrupo1 = b(k1(posibleGrupo1), k2(posibleGrupo1), k3(posibleGrupo1), k4(posibleGrupo1));
+                    var aGrupo1 = a(bGrupo1, k1(posibleGrupo1), k2(posibleGrupo1), k3(posibleGrupo1), k4(posibleGrupo1));
                     /* Genera las estimaciones con los valores a y b */
                     var estimados1 = estimar(posibleGrupo1, aGrupo1, bGrupo1);
 
-                    var aGrupo2 = a(k1(posibleGrupo2), k2(posibleGrupo2), k3(posibleGrupo2), k4(posibleGrupo2));
                     var bGrupo2 = b(k1(posibleGrupo2), k2(posibleGrupo2), k3(posibleGrupo2), k4(posibleGrupo2));
+                    var aGrupo2 = a(bGrupo2, k1(posibleGrupo2), k2(posibleGrupo2), k3(posibleGrupo2), k4(posibleGrupo2));
                     var estimados2 = estimar(posibleGrupo2, aGrupo2, bGrupo2);
 
                     /* Calcula para las estimaciones cual es el error */
                     /* Si ese error es menor a 0.3 para las dos estimaciones, se devuelve como valida */
                     if(erroresCuadrados(estimados1, posibleGrupo1) < 0.3 && erroresCuadrados(estimados2, posibleGrupo2) < 0.3){
-                        return [posibleGrupo1, posibleGrupo2];
+                        return [posibleGrupo1, posibleGrupo2, estimados1, estimados2];
                     }
 
                 }
@@ -149,3 +158,19 @@ function obtenerCombionacionCorrecta(){
     }
 
 }
+
+var combinacionCorrecta = obtenerCombionacionCorrecta();
+var grupo1 = combinacionCorrecta[0];
+var grupo2 = combinacionCorrecta[1];
+var estimados1 = combinacionCorrecta[2];
+var estimados2 = combinacionCorrecta[3];
+
+console.log("El grupo 1 es: "   + JSON.stringify(grupo1));
+console.log("Estimando da: "    + JSON.stringify(estimados1));
+console.log("Dando un error de: " + erroresCuadrados(estimados1, grupo1));
+
+console.log("------------------------------------------------");
+
+console.log("El grupo 2 es: "   + JSON.stringify(grupo2));
+console.log("Estimando da: "    + JSON.stringify(estimados2));
+console.log("Dando un error de: " + erroresCuadrados(estimados2, grupo2));
