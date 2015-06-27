@@ -11,17 +11,65 @@ var muestras = [
     {'x': 390, 'y': 198}
 ];
 
-var posibilidades = [];
-for(i=0;i<=4;i++){
-        for(j=i+1;j<=5;j++){
-                for(k=j+1;k<=6;k++){
-                        for(l=k+1;l<=7;l++){
-                                var posibilidad = [muestras[i], muestras[j], muestras[k], muestras[l]];
-                                //Yo en vez de pushear y mandar en un array, evaluaría todo directo acá, asi no itera de más :P
-                                posibilidades.push(posibilidad);
-                        }
-                }
-        }
+
+function k1(){
+
 }
 
-console.log(posibilidades);
+function k2(){
+
+}
+
+function k3(){
+
+}
+
+function k4(){
+
+}
+
+function a(k1, k2, k3, k4){
+
+}
+
+function b(k1, k2, k3, k4){
+
+}
+
+function estimar(valores, a, b){
+
+}
+
+function erroresCuadrados(estimado, real){
+
+}
+
+
+function obtenerCombionacionCorrecta(){
+    for(i=0;i<=4;i++){
+            for(j=i+1;j<=5;j++){
+                    for(k=j+1;k<=6;k++){
+                            for(l=k+1;l<=7;l++){
+
+                                    var posibleGrupo1 = [muestras[i], muestras[j], muestras[k], muestras[l]];
+                                    var posibleGrupo2 = []; //Los restantes
+
+                                    //Agregar funciones para los k1, k2, k3, k4
+                                    var aGrupo1 = a(k1, k2, k3, k4);
+                                    var bGrupo1 = b(k1, k2, k3, k4);
+                                    var estimados1 = estimar(posibleGrupo1, aGrupo1, bGrupo1);
+
+                                    //Agregar funciones para los k1, k2, k3, k4
+                                    var aGrupo2 = a(k1, k2, k3, k4);
+                                    var bGrupo2 = b(k1, k2, k3, k4);
+                                    var estimados2 = estimar(posibleGrupo2, aGrupo2, bGrupo2);
+
+                                    if(erroresCuadrados(estimados1, posibleGrupo1) < 0.3 && erroresCuadrados(estimados2, posibleGrupo2) < 0.3){
+                                        return [posibleGrupo1, posibleGrupo2];
+                                    }
+
+                            }
+                    }
+            }
+    }
+}
