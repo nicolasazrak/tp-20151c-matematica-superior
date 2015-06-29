@@ -64,7 +64,6 @@ function k1(muestras){
 
 function k2(muestras){
     return muestras.reduce(function(valorAnterior, muestraActual){
-        //return valorAnterior + Math.pow(muestraActual.y, 2);
         return valorAnterior + muestraActual.x;
     }, 0);
 }
@@ -149,7 +148,7 @@ function obtenerCombionacionCorrecta(){
                     /* Calcula para las estimaciones cual es el error */
                     /* Si ese error es menor a 0.3 para las dos estimaciones, se devuelve como valida */
                     if(erroresCuadrados(estimados1, posibleGrupo1) < 0.3 && erroresCuadrados(estimados2, posibleGrupo2) < 0.3){
-                        return [posibleGrupo1, posibleGrupo2, estimados1, estimados2];
+                        return [posibleGrupo1, posibleGrupo2, estimados1, estimados2, aGrupo1, bGrupo1, aGrupo2, bGrupo2];
                     }
 
                 }
@@ -164,13 +163,20 @@ var grupo1 = combinacionCorrecta[0];
 var grupo2 = combinacionCorrecta[1];
 var estimados1 = combinacionCorrecta[2];
 var estimados2 = combinacionCorrecta[3];
+var aGrupo1 = combinacionCorrecta[4];
+var bGrupo1 = combinacionCorrecta[5];
+var aGrupo2 = combinacionCorrecta[6];
+var bGrupo2 = combinacionCorrecta[7];
 
 console.log("El grupo 1 es: "   + JSON.stringify(grupo1));
 console.log("Estimando da: "    + JSON.stringify(estimados1));
 console.log("Dando un error de: " + erroresCuadrados(estimados1, grupo1));
+console.log("Se aproxima con la formula: " + aGrupo1 + ".X + " + bGrupo1);
+
 
 console.log("------------------------------------------------");
 
 console.log("El grupo 2 es: "   + JSON.stringify(grupo2));
 console.log("Estimando da: "    + JSON.stringify(estimados2));
 console.log("Dando un error de: " + erroresCuadrados(estimados2, grupo2));
+console.log("Se aproxima con la formula: " + aGrupo2 + ".X + " + bGrupo2);
